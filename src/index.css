@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply bg-slate-950;
+}
+
+.dark body {
+  @apply bg-slate-950 text-slate-100;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    @apply dark;
+  }
+}
