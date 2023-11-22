@@ -12,6 +12,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { SignUpValidation } from '@/lib/validation';
 import { z } from 'zod';
+import { Link } from 'react-router-dom';
+import { ROUTES } from '@/_constants/ROUTES';
 
 const SignUp = () => {
   const form = useForm<z.infer<typeof SignUpValidation>>({
@@ -34,9 +36,9 @@ const SignUp = () => {
         <h1 className='text-3xl font-semibold'>Sign Up</h1>
         <p>
           Already have an account?{' '}
-          <a href='#' className='text-blue-500 hover:underline'>
+          <Link to={ROUTES.SIGN_IN} className='text-purple-500 hover:underline'>
             Sign In
-          </a>
+          </Link>
         </p>
       </div>
       <form
