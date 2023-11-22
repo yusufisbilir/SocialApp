@@ -41,7 +41,7 @@ const SignUp = () => {
       </div>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className='flex flex-col gap-3 mt-6 sm:w-96'
+        className='flex flex-col w-full gap-3 px-4 mt-6 sm:w-96 sm:px-0'
       >
         <FormField
           control={form.control}
@@ -95,7 +95,12 @@ const SignUp = () => {
             </FormItem>
           )}
         />
-        <Button type='submit'>Submit</Button>
+        <Button
+          type='submit'
+          className='text-white bg-purple-600 text-md hover:bg-purple-500'
+        >
+          Sign Up
+        </Button>
       </form>
     </Form>
   );
