@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 
 export type INewUser = {
   name: string;
-  userName: string;
+  username: string;
   email: string;
   password: string;
 };

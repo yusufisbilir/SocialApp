@@ -30,7 +30,7 @@ const SignUp = () => {
     resolver: zodResolver(SignUpValidation),
     defaultValues: {
       name: '',
-      userName: '',
+      username: '',
       email: '',
       password: '',
     },
@@ -98,7 +98,7 @@ const SignUp = () => {
         />
         <FormField
           control={form.control}
-          name='userName'
+          name='username'
           render={({ field }) => (
             <FormItem>
               <FormLabel>User Name</FormLabel>
@@ -138,8 +138,11 @@ const SignUp = () => {
         <Button
           type='submit'
           className='text-white bg-purple-600 text-md hover:bg-purple-500'
+          disabled={isUserAuthenticating || isCreatingUser || isSigningIn}
         >
-          Sign Up
+          {isUserAuthenticating || isCreatingUser || isSigningIn
+            ? 'Loading...'
+            : 'Sign Up'}
         </Button>
       </form>
     </Form>
