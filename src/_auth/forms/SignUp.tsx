@@ -12,13 +12,20 @@ import {
 import { Input } from '@/components/ui/input';
 import { SignUpValidation } from '@/lib/validation';
 import { z } from 'zod';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/_constants/ROUTES';
-import { createUser } from '@/lib/appwrite/api';
 import { useToast } from '@/components/ui/use-toast';
+import { useCreateUser, useSignIn } from '@/lib/react-query/queriesMutations';
+import { useUserContext } from '@/context/AuthContext';
 
 const SignUp = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { checkAuthUser, isLoading: isUserAuthenticating } = useUserContext();
+  const { mutateAsync: createUser, isPending: isCreatingUser } =
+    useCreateUser();
+  const { mutateAsync: signIn, isPending: isSigningIn } = useSignIn();
+
   const form = useForm<z.infer<typeof SignUpValidation>>({
     resolver: zodResolver(SignUpValidation),
     defaultValues: {
@@ -32,6 +39,28 @@ const SignUp = () => {
   const onSubmit = async (values: z.infer<typeof SignUpValidation>) => {
     const newUser = await createUser(values);
     if (!newUser) {
+      return toast({
+        title: 'Sign up failed. Please try again.',
+        variant: 'destructive',
+      });
+    }
+
+    const { email, password } = values;
+    const session = await signIn({ email, password });
+
+    if (!session) {
+      return toast({
+        title: 'Sign in failed. Please try again.',
+        variant: 'destructive',
+      });
+    }
+
+    const isLoggedIn = await checkAuthUser();
+
+    if (isLoggedIn) {
+      form.reset();
+      navigate(ROUTES.HOME);
+    } else {
       return toast({
         title: 'Sign up failed. Please try again.',
         variant: 'destructive',
