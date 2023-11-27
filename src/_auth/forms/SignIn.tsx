@@ -12,10 +12,17 @@ import {
 import { Input } from '@/components/ui/input';
 import { SignInValidation } from '@/lib/validation';
 import { z } from 'zod';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/_constants/ROUTES';
+import { useUserContext } from '@/context/AuthContext';
+import { useSignIn } from '@/lib/react-query/queriesMutations';
+import { toast } from '@/components/ui/use-toast';
 
 const SignIn = () => {
+  const { checkAuthUser, isLoading: isUserAuthenticating } = useUserContext();
+  const { mutateAsync: signIn, isPending: isSigningIn } = useSignIn();
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof SignInValidation>>({
     resolver: zodResolver(SignInValidation),
     defaultValues: {
@@ -24,8 +31,28 @@ const SignIn = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof SignInValidation>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof SignInValidation>) => {
+    const { email, password } = values;
+    const session = await signIn({ email, password });
+
+    if (!session) {
+      return toast({
+        title: 'Sign in failed. Please try again.',
+        variant: 'destructive',
+      });
+    }
+
+    const isLoggedIn = await checkAuthUser();
+
+    if (isLoggedIn) {
+      form.reset();
+      navigate(ROUTES.HOME);
+    } else {
+      return toast({
+        title: 'Sign up failed. Please try again.',
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
@@ -72,8 +99,9 @@ const SignIn = () => {
         <Button
           type='submit'
           className='text-white bg-purple-600 text-md hover:bg-purple-500'
+          disabled={isUserAuthenticating || isSigningIn}
         >
-          Sign In
+          {isUserAuthenticating || isSigningIn ? 'Loading...' : 'Sign In'}
         </Button>
       </form>
     </Form>
