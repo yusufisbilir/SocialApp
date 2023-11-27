@@ -1,13 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
-import { IconLogout } from '@tabler/icons-react';
 import { useSignOut } from '@/lib/react-query/queriesMutations';
 import { useEffect } from 'react';
 import { ROUTES } from '@/_constants/ROUTES';
+import { useUserContext } from '@/context/AuthContext';
+import { LogOut, LucideUser } from 'lucide-react';
 
 const TopBar = () => {
   const { mutate: signOut, isSuccess } = useSignOut();
   const navigate = useNavigate();
+  const { user } = useUserContext();
 
   useEffect(() => {
     if (isSuccess) {
@@ -21,10 +23,20 @@ const TopBar = () => {
         <Link to='/' className='flex items-center gap-3'>
           <h1 className='text-lg font-semibold'>@SocialApp</h1>
         </Link>
-        <div className='flex gap-4'>
+        <div className='flex items-center gap-4'>
           <Button variant='ghost' onClick={() => signOut()}>
-            <IconLogout />
+            <LogOut />
           </Button>
+          <Link
+            to={`${ROUTES.PROFILE}/${user?.id}`}
+            className='flex items-center gap-3'
+          >
+            {user?.imageUrl ? (
+              <img src={user?.imageUrl} className='w-8 h-8 rounded-full' />
+            ) : (
+              <LucideUser />
+            )}
+          </Link>
         </div>
       </div>
     </section>
