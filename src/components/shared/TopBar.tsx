@@ -18,7 +18,7 @@ const TopBar = () => {
   }, [isSuccess]);
 
   return (
-    <section className='sticky top-0 z-50 w-full md:hidden bg-dark-2'>
+    <section className='sticky top-0 z-50 w-full md:hidden'>
       <div className='flex items-center justify-between p-4'>
         <Link to='/' className='flex items-center gap-3'>
           <h1 className='text-lg font-semibold'>@SocialApp</h1>
