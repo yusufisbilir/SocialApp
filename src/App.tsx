@@ -9,7 +9,7 @@ import { Toaster } from './components/ui/toaster';
 
 const App = () => {
   return (
-    <main className='flex h-screen'>
+    <main className='flex h-screen dark'>
       <Routes>
         {/* public */}
         <Route element={<AuthLayout />}>
