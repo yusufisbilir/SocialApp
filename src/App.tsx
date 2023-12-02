@@ -4,7 +4,17 @@ import SignIn from './_auth/forms/SignIn';
 import SignUp from './_auth/forms/SignUp';
 import AuthLayout from './_auth/AuthLayout';
 import RootLayout from './_root/RootLayout';
-import { Home } from './_root/pages';
+import {
+  AllUsers,
+  CreatePost,
+  Explore,
+  Home,
+  PostDetail,
+  Profile,
+  Saved,
+  UpdatePost,
+  UpdateProfile,
+} from './_root/pages';
 import { Toaster } from './components/ui/toaster';
 
 const App = () => {
@@ -19,6 +29,18 @@ const App = () => {
         {/* private */}
         <Route path='/' element={<RootLayout />}>
           <Route index path={ROUTES.HOME} element={<Home />} />
+          <Route index path={ROUTES.EXPLORE} element={<Explore />} />
+          <Route index path={ROUTES.SAVED} element={<Saved />} />
+          <Route index path={ROUTES.PEOPLE} element={<AllUsers />} />
+          <Route index path={ROUTES.CREATE_POST} element={<CreatePost />} />
+          <Route index path={ROUTES.UPDATE_POST} element={<UpdatePost />} />
+          <Route index path={ROUTES.POST_DETAIL} element={<PostDetail />} />
+          <Route index path={ROUTES.PROFILE} element={<Profile />} />
+          <Route
+            index
+            path={ROUTES.UPDATE_PROFILE}
+            element={<UpdateProfile />}
+          />
         </Route>
       </Routes>
 
@@ -28,3 +50,5 @@ const App = () => {
 };
 
 export default App;
+
+// 2:39
