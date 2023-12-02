@@ -6,4 +6,8 @@ export const ROUTES = {
   EXPLORE: '/explore',
   PEOPLE: '/all-users',
   SAVED: '/saved',
+  CREATE_POST: '/create-post',
+  UPDATE_POST: '/update-post/:id',
+  POST_DETAIL: '/posts/:id',
+  UPDATE_PROFILE: '/update-profile/:id',
 };
