@@ -3,7 +3,7 @@ import { sidebarLinks } from '@/_constants/SidebarLinks';
 import { useUserContext } from '@/context/AuthContext';
 import { useSignOut } from '@/lib/react-query/queriesMutations';
 import { useEffect } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
 import { LogOut } from 'lucide-react';
 
@@ -11,6 +11,7 @@ const LeftSidebar = () => {
   const { mutate: signOut, isSuccess } = useSignOut();
   const navigate = useNavigate();
   const { user } = useUserContext();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     if (isSuccess) {
@@ -38,14 +39,22 @@ const LeftSidebar = () => {
         </Link>
 
         <ul className='flex flex-col gap-6'>
-          {sidebarLinks?.map((link) => (
-            <li key={link.label}>
-              <NavLink to={link.route} className='flex items-center gap-3'>
-                <link.icon />
-                <p>{link.label}</p>
-              </NavLink>
-            </li>
-          ))}
+          {sidebarLinks?.map((link) => {
+            const samePath = pathname === link.route;
+            return (
+              <li key={link.label}>
+                <NavLink
+                  to={link.route}
+                  className={`flex items-center gap-3 p-2 rounded-lg ${
+                    samePath && 'bg-purple-900'
+                  }`}
+                >
+                  <link.icon />
+                  <p>{link.label}</p>
+                </NavLink>
+              </li>
+            );
+          })}
         </ul>
       </div>
       <Button
