@@ -1,3 +1,4 @@
+import PostForm from '@/components/forms/PostForm';
 import { ImagePlus } from 'lucide-react';
 
 const CreatePost = () => {
@@ -8,6 +9,7 @@ const CreatePost = () => {
           <ImagePlus size={36} />
           <h2 className='text-xl font-semibold'>Create Post</h2>
         </div>
+        <PostForm />
       </div>
     </div>
   );
