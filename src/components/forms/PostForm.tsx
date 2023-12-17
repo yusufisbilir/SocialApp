@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/form';
 import { Textarea } from '../ui/textarea';
 import { Input } from '../ui/input';
+import FileUploader from '../shared/FileUploader';
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -20,7 +21,7 @@ const formSchema = z.object({
   }),
 });
 
-const PostForm = () => {
+const PostForm = ({ post }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -61,7 +62,13 @@ const PostForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Photos</FormLabel>
-              <FormControl>{/* <Fileuploader {...field} /> */}</FormControl>
+              <FormControl>
+                <FileUploader
+                  fieldChange={field.onChange}
+                  mediaUrl={post?.imageUrl}
+                  {...field}
+                />
+              </FormControl>
               <FormMessage className='text-red-500' />
             </FormItem>
           )}
