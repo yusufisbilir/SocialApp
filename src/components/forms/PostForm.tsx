@@ -14,23 +14,26 @@ import {
 import { Textarea } from '../ui/textarea';
 import { Input } from '../ui/input';
 import FileUploader from '../shared/FileUploader';
+import { PostValidation } from '@/lib/validation';
+import { Models } from 'appwrite';
 
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: 'Username must be at least 2 characters.',
-  }),
-});
+type IProps = {
+  post?: Models.Document;
+};
 
-const PostForm = ({ post }) => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+const PostForm = ({ post }: IProps) => {
+  const form = useForm<z.infer<typeof PostValidation>>({
+    resolver: zodResolver(PostValidation),
     defaultValues: {
-      username: '',
+      caption: post?.caption ?? '',
+      file: [],
+      location: post?.location ?? '',
+      tags: post?.tags ? post?.tags?.join(',') : '',
     },
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof PostValidation>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
