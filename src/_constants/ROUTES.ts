@@ -8,6 +8,6 @@ export const ROUTES = {
   SAVED: '/saved',
   CREATE_POST: '/create-post',
   UPDATE_POST: '/update-post/:id',
-  POST_DETAIL: '/posts/:id',
+  POST_DETAIL: '/post/:id',
   UPDATE_PROFILE: '/update-profile/:id',
 };
