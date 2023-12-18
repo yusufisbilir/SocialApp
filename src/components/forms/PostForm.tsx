@@ -16,12 +16,23 @@ import { Input } from '../ui/input';
 import FileUploader from '../shared/FileUploader';
 import { PostValidation } from '@/lib/validation';
 import { Models } from 'appwrite';
+import { useCreatePost } from '@/lib/react-query/queriesMutations';
+import { useUserContext } from '@/context/AuthContext';
+import { useToast } from '../ui/use-toast';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '@/_constants/ROUTES';
 
 type IProps = {
   post?: Models.Document;
 };
 
 const PostForm = ({ post }: IProps) => {
+  const { mutateAsync: createPost, isPending: isLoadingCreate } =
+    useCreatePost();
+  const { user } = useUserContext();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof PostValidation>>({
     resolver: zodResolver(PostValidation),
     defaultValues: {
@@ -32,11 +43,15 @@ const PostForm = ({ post }: IProps) => {
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof PostValidation>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof PostValidation>) {
+    const newPost = await createPost({
+      ...values,
+      userId: user?.id,
+    });
+    if (!newPost) {
+      toast({ title: 'Please try again' });
+    }
+    navigate(ROUTES.HOME);
   }
   return (
     <Form {...form}>
@@ -115,6 +130,7 @@ const PostForm = ({ post }: IProps) => {
           <Button
             type='submit'
             className='text-white bg-purple-700 submit hover:bg-purple-600'
+            disabled={isLoadingCreate}
           >
             Submit
           </Button>
