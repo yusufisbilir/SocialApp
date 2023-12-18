@@ -41,7 +41,7 @@ const PostCard = ({ post }: PostCardProps) => {
           <Edit className='w-5 h-5 text-gray-500' />
         </Link>
       </div>
-      <Link to={`/posts/${post.$id}`}>
+      <Link to={`/post/${post.$id}`}>
         <div className='py-5'>
           <p>{post.caption}</p>
           <ul className='flex gap-1 mt-2'>
