@@ -3,6 +3,7 @@ import { multiFormatDateString } from '@/lib/utils';
 import { Models } from 'appwrite';
 import { Edit } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import PostStats from './PostStats';
 
 type PostCardProps = {
   post: Models.Document;
@@ -56,6 +57,8 @@ const PostCard = ({ post }: PostCardProps) => {
           className='h-64 xs:h-[400px] lg:h-[450px] w-full rounded-[24px] object-cover mb-5'
         />
       </Link>
+
+      <PostStats post={post} userId={user.id} />
     </div>
   );
 };
