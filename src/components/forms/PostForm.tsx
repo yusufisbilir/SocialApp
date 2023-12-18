@@ -16,7 +16,10 @@ import { Input } from '../ui/input';
 import FileUploader from '../shared/FileUploader';
 import { PostValidation } from '@/lib/validation';
 import { Models } from 'appwrite';
-import { useCreatePost } from '@/lib/react-query/queriesMutations';
+import {
+  useCreatePost,
+  useUpdatePost,
+} from '@/lib/react-query/queriesMutations';
 import { useUserContext } from '@/context/AuthContext';
 import { useToast } from '../ui/use-toast';
 import { useNavigate } from 'react-router-dom';
@@ -24,11 +27,14 @@ import { ROUTES } from '@/_constants/ROUTES';
 
 type IProps = {
   post?: Models.Document;
+  action: 'create' | 'update';
 };
 
-const PostForm = ({ post }: IProps) => {
+const PostForm = ({ post, action }: IProps) => {
   const { mutateAsync: createPost, isPending: isLoadingCreate } =
     useCreatePost();
+  const { mutateAsync: updatePost, isPending: isLoadingUpdate } =
+    useUpdatePost();
   const { user } = useUserContext();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -44,6 +50,20 @@ const PostForm = ({ post }: IProps) => {
   });
 
   async function onSubmit(values: z.infer<typeof PostValidation>) {
+    if (post && action === 'update') {
+      const updatedPost = await updatePost({
+        ...values,
+        postId: post.$id,
+        imageId: post.imageId,
+        imageUrl: post.imageUrl,
+      });
+
+      if (!updatedPost) {
+        toast({ title: 'Please try again' });
+      }
+
+      return navigate(`/post/${post.$id}`);
+    }
     const newPost = await createPost({
       ...values,
       userId: user?.id,
@@ -130,9 +150,9 @@ const PostForm = ({ post }: IProps) => {
           <Button
             type='submit'
             className='text-white bg-purple-700 submit hover:bg-purple-600'
-            disabled={isLoadingCreate}
+            disabled={isLoadingCreate || isLoadingUpdate}
           >
-            Submit
+            {isLoadingCreate || isLoadingUpdate ? 'Loading' : 'Submit'}
           </Button>
         </div>
       </form>

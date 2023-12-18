@@ -4,11 +4,7 @@ import { Models } from 'appwrite';
 import { Loader } from 'lucide-react';
 
 const Home = () => {
-  const {
-    data: posts,
-    isPending: isPostLoading,
-    isError: isErrorPosts,
-  } = useGetRecentPosts();
+  const { data: posts, isPending: isPostLoading } = useGetRecentPosts();
   return (
     <div className='flex grow'>
       <div className='flex flex-col items-center gap-10 px-5 py-10 overflow-auto grow md:px-8 lg:p-14'>

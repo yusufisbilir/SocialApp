@@ -9,7 +9,7 @@ const CreatePost = () => {
           <ImagePlus size={36} />
           <h2 className='text-xl font-semibold'>Create Post</h2>
         </div>
-        <PostForm />
+        <PostForm action='create' />
       </div>
     </div>
   );
